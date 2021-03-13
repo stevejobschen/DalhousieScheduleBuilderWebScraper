@@ -52,7 +52,6 @@ def parseDoubleDate(time):
     else:
         return 0
 
-
 def parseCourse(course_data):
     termNub = course_data[1].find_all('td')[1].find('b').string + ""  # get crn and get first letter
     # print(termNub[0])
@@ -79,10 +78,7 @@ def parseCourse(course_data):
                     course['days'] = parseDate(courseInfo[6:11])
 
                     course['times'] = courseInfo[11].br.next_sibling
-                    if (courseInfo[11].br.next_sibling.next_sibling != None):
-                        time_one = courseInfo[11].br.next_sibling
-                        time_two = courseInfo[11].br.next_sibling.next_sibling.next_sibling
-                        course['times'] = "ONE(" + time_one + ") TWO(" + time_two + ")"
+                    processTimes(courseInfo,course)
 
                     course['location'] = courseInfo[12].br.next_sibling
                     if (course['location'] == None):
@@ -193,9 +189,6 @@ def parseUrl(url):
             pageCount = 1
 
         # MARK: ROWS
-        # for w in soup.find_all('select')[1].find_all('option')[1:]:
-        #    print("\""+w['value'], end='\",')
-
         # read table line by line
         rows = soup.find_all('table', attrs={'class': 'dataentrytable'})[1].find_all('tr')
 
@@ -208,12 +201,10 @@ def parseUrl(url):
         for i in range(0, len(headerIndexs) - 1):
             course_raw = rows[headerIndexs[i]:(headerIndexs[i + 1])]
             courses_raw.append(course_raw)
-        # print(course_raw)
         course_raw = rows[headerIndexs[len(headerIndexs) - 1]:]
         courses_raw.append(course_raw)
 
         for course in courses_raw:
-            # print(parseCourse(course))
             courses.append(parseCourse(course))
         j += 1
     return courses
@@ -226,6 +217,14 @@ def setPageHelper(page):
         return '1'
     else:
         return str((20 * (page - 1)) + 1)
+
+
+def processTimes(courseInfo,course):
+    if (courseInfo[11].br.next_sibling.next_sibling != None):
+        time_one = courseInfo[11].br.next_sibling
+        time_two = courseInfo[11].br.next_sibling.next_sibling.next_sibling
+        course['times'] = "ONE(" + time_one + ") TWO(" + time_two + ")"
+
 
 
 def main():
