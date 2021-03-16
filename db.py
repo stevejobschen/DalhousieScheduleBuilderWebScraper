@@ -3,7 +3,7 @@ import pymysql as mysql
 class Database:
         host = '127.0.0.1'
         user = 'root'
-        password = 'lalaland123'
+        password = 'Euthanasia223'
         db = 'dal'
 
         def __init__(self):
