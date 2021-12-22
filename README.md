@@ -1,1 +1,1 @@
-# DalhousieScheduleBuilderWebScrapper
+# DalhousieScheduleBuilderWebScraper
